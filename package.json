@@ -1,0 +1,19 @@
+{
+  "name": "png-tiny-info",
+  "version": "0.1.0",
+  "description": "Library to get PNG file info",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc"
+  },
+  "keywords": [
+    "png"
+  ],
+  "author": "arthrp",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/node": "^20.12.11",
+    "typescript": "^5.4.5"
+  }
+}
