@@ -4,8 +4,8 @@
   "description": "Library to get PNG file info",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx tsc"
+    "test": "jest",
+    "build": "tsc"
   },
   "keywords": [
     "png"
