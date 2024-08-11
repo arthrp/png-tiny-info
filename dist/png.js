@@ -11,18 +11,23 @@ exports.parsePngFile = parsePngFile;
 function parsePng(fileDataArr) {
     if (!(fileDataArr instanceof Uint8Array))
         throw new Error("Data is not a valid array");
+    if (fileDataArr.length < 8 + 12 + 13 + 12)
+        throw new Error("Data array too small"); //header + IHDR + IEND
     const header = new Uint8Array(fileDataArr.slice(0, 8));
     const isValid = isHeaderValid(header);
     if (!isValid)
         throw new Error("PNG header invalid");
     let chunkName = "";
     let i = 8;
+    let c = 0;
     const chunks = [];
-    while (chunkName !== "IEND") {
+    const maxChunks = Number.MAX_SAFE_INTEGER - 1;
+    while (chunkName !== "IEND" && c < maxChunks) {
         let [chunk, n] = parsePngChunk(fileDataArr, i);
         chunkName = chunk.type;
         i = n;
         chunks.push(chunk);
+        c++;
     }
     const infoChunk = chunks.filter(c => c.type === "IHDR")[0];
     const info = parsePngHeader(infoChunk.data);
