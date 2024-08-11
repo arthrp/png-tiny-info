@@ -1,6 +1,11 @@
 type PngIhdr = {
     width: number;
     height: number;
+    bitDepth: number;
+    colorType: number;
+    compressionMethod: number;
+    filterMethod: number;
+    interlaceMethod: number;
 };
 type PngChunk = {
     length: number;

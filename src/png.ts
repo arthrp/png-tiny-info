@@ -2,7 +2,12 @@ import fs = require('fs');
 
 type PngIhdr = {
     width: number,
-    height: number
+    height: number,
+    bitDepth: number,
+    colorType: number,
+    compressionMethod: number,
+    filterMethod: number,
+    interlaceMethod: number
 }
 
 type PngChunk = {
@@ -52,12 +57,17 @@ export function parsePng(fileDataArr: Uint8Array): PngType {
 }
 
 function parsePngHeader(data: Uint8Array): PngIhdr {
-    const widArr = data.slice(0,4);
-    const width = arrToNumber(widArr);
-    const heightArr = data.slice(4,8);
-    const height = arrToNumber(heightArr);
+    const width = sliceToNumber(data,0,4);
+    const height = sliceToNumber(data,4,8);
+    const bitDepth = sliceToNumber(data,8,9);
+    const colorType = sliceToNumber(data,9,10);
+    const compressionMethod = sliceToNumber(data,10,11);
+    const filterMethod = sliceToNumber(data,11,12);
+    const interlaceMethod = sliceToNumber(data,12,13);
 
-    return { width, height };
+    console.log(bitDepth);
+
+    return { width, height, bitDepth, colorType, compressionMethod, filterMethod, interlaceMethod };
 }
 
 function parsePngChunk(arr: Uint8Array, start: number): [PngChunk, number] {
@@ -69,6 +79,11 @@ function parsePngChunk(arr: Uint8Array, start: number): [PngChunk, number] {
 
     const i = start+8+len+4; //length:4b + type:4b + data + CRC:4b
     return [{length: len, type, data}, i];
+}
+
+function sliceToNumber(data: Uint8Array, start: number, end: number){
+    const arr = data.slice(start,end);
+    return arrToNumber(arr);
 }
 
 function arrToNumber(arr: Uint8Array){

@@ -35,11 +35,15 @@ function parsePng(fileDataArr) {
 }
 exports.parsePng = parsePng;
 function parsePngHeader(data) {
-    const widArr = data.slice(0, 4);
-    const width = arrToNumber(widArr);
-    const heightArr = data.slice(4, 8);
-    const height = arrToNumber(heightArr);
-    return { width, height };
+    const width = sliceToNumber(data, 0, 4);
+    const height = sliceToNumber(data, 4, 8);
+    const bitDepth = sliceToNumber(data, 8, 9);
+    const colorType = sliceToNumber(data, 9, 10);
+    const compressionMethod = sliceToNumber(data, 10, 11);
+    const filterMethod = sliceToNumber(data, 11, 12);
+    const interlaceMethod = sliceToNumber(data, 12, 13);
+    console.log(bitDepth);
+    return { width, height, bitDepth, colorType, compressionMethod, filterMethod, interlaceMethod };
 }
 function parsePngChunk(arr, start) {
     const lenArr = arr.slice(start, start + 4);
@@ -49,6 +53,10 @@ function parsePngChunk(arr, start) {
     const data = arr.slice(start + 8, start + 8 + len);
     const i = start + 8 + len + 4; //length:4b + type:4b + data + CRC:4b
     return [{ length: len, type, data }, i];
+}
+function sliceToNumber(data, start, end) {
+    const arr = data.slice(start, end);
+    return arrToNumber(arr);
 }
 function arrToNumber(arr) {
     const num = arr.reduce((acc, n) => (acc << 8) + n, 0);
